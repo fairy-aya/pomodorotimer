@@ -1,9 +1,9 @@
 class PomodoroTimer {
     constructor() {
         this.modes = {
-            work: { name: '作業中', duration: 25 },
-            short: { name: '短い休憩中', duration: 5 },
-            long: { name: '長い休憩中', duration: 15 }
+            work: { name: '作業中', duration: 1500 }, // 25分を秒に変換
+            short: { name: '短い休憩中', duration: 300 }, // 5分を秒に変換
+            long: { name: '長い休憩中', duration: 900 } // 15分を秒に変換
         };
         this.currentMode = 'work';
         this.cycleCount = 1;
@@ -96,14 +96,15 @@ class PomodoroTimer {
     }
 
     getInitialDuration(mode) {
-        switch (mode) {
-            case 'work':
-                return parseInt(this.elements.workTime.value);
-            case 'short':
-                return parseInt(this.elements.shortBreak.value);
-            case 'long':
-                return parseInt(this.elements.longBreak.value);
-        }
+        const baseTime = {
+            work: 1500,
+            short: 300,
+            long: 900
+        };
+        
+        const input = document.getElementById(`${mode}-time`);
+        const minutes = parseInt(input.value);
+        return minutes * 60; // 分を秒に変換
     }
 
     tick() {
@@ -165,7 +166,10 @@ class PomodoroTimer {
     }
 
     playNotificationSound() {
-        const audio = new Audio('notification-sound.mp3'); // 通知音ファイルを追加する必要があります
+        // より良い通知音を追加
+        const audio = new Audio();
+        audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU8BAAC8AAAAAwAAABgAAAAAAAAAAAAAABAAADwAAAAA=';
+        audio.volume = 0.5;
         audio.play();
     }
 }
